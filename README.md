@@ -317,8 +317,3 @@ Open your browser and navigate to:
 
 ISC License - Feel free to use this project for learning and development.
 
-## 👨‍💻 Developer
-
-Built with ❤️ using Node.js, Express, and Supabase
-
----

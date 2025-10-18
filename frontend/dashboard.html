@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CarBnB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="icon" href="data:,">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                        <i data-lucide="car" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">CarBnB</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Home</a>
+                    <a href="carpool.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Carpool</a>
+                    <a href="car-listing.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">List Your Car</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="Profile" class="w-8 h-8 rounded-full">
+                        <span id="userName" class="text-gray-700 dark:text-gray-300">John Doe</span>
+                    </div>
+                    <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <i data-lucide="sun" class="w-5 h-5 text-gray-600 dark:text-gray-300 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-gray-600 dark:text-gray-300 hidden dark:block"></i>
+                    </button>
+                    <button onclick="logout()" class="p-2 rounded-lg bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Dashboard Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Dashboard <span id="roleLabel" class="text-lg font-normal text-gray-500 dark:text-gray-400"></span></h2>
+            <p class="text-gray-600 dark:text-gray-400">Welcome back! Here's what's happening with your account.</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Total Bookings</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-white" id="totalBookings">5</p>
+                    </div>
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
+                        <i data-lucide="calendar" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Active Rentals</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-white" id="activeRentals">2</p>
+                    </div>
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
+                        <i data-lucide="car" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Total Spent</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-white" id="totalSpent">₹0</p>
+                    </div>
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
+                        <i data-lucide="dollar-sign" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Saved Amount</p>
+                        <p class="text-2xl font-bold text-green-600" id="savedAmount">₹0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="piggy-bank" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <!-- Role-based Content -->
+        <div id="renterDashboard" class="hidden">
+            <!-- SOS Emergency Button -->
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-red-800 dark:text-red-400 mb-2">Emergency Assistance</h3>
+                        <p class="text-red-600 dark:text-red-400 text-sm">Need immediate help? Press the SOS button for emergency assistance.</p>
+                    </div>
+                    <button onclick="triggerSOS()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors">
+                        <i data-lucide="phone-call" class="w-5 h-5 inline mr-2"></i>
+                        SOS
+                    </button>
+                </div>
+            </div>
+
+            <!-- My Bookings -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">My Bookings</h3>
+                    <a href="index.html" class="text-primary-600 dark:text-primary-400 hover:underline">Book Another Car</a>
+                </div>
+                <div id="bookingsList" class="space-y-4">
+                    <!-- Bookings will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- My Carpool Bookings -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">My Carpool Rides</h3>
+                    <a href="carpool.html" class="text-primary-600 dark:text-primary-400 hover:underline">Find a Ride</a>
+                </div>
+                <div id="carpoolBookingsList" class="space-y-4"></div>
+            </div>
+
+            <!-- My Hosted Rides (for renters who host) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">My Hosted Rides</h3>
+                    <a href="carpool.html" class="text-primary-600 dark:text-primary-400 hover:underline">Offer a Ride</a>
+                </div>
+                <div id="hostedTripsListRenter" class="space-y-4"></div>
+            </div>
+
+            <!-- Emergency Contacts (Renter) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Emergency Contacts</h3>
+                    <span class="text-sm text-gray-500">Saved locally on this device</span>
+                </div>
+                <form onsubmit="addSosContact(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <input id="sosName" type="text" placeholder="Name" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                    <input id="sosPhone" type="tel" placeholder="Phone (+91 XXXXX XXXXX)" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                    <button class="gradient-bg text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90">Add Contact</button>
+                </form>
+                <div id="sosContactsList" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <div id="ownerDashboard" class="hidden">
+            <!-- Owner Stats -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Earnings Overview</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-green-600" id="ownerMonth">₹0</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">This Month (confirmed/completed)</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-blue-600" id="ownerTotal">₹0</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Total Earnings</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-purple-600" id="ownerRate">0%</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Booking Rate</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Listed Cars -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">My Listed Cars</h3>
+                    <a href="car-listing.html" class="px-4 py-2 gradient-bg text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
+                        <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i>
+                        Add New Car
+                    </a>
+                </div>
+                <div id="ownerCarsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Owner's cars will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Emergency Contacts (Owner) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mt-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Emergency Contacts</h3>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Used when SOS is pressed</span>
+                </div>
+                <form onsubmit="addSosContact(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <input id="sosName" type="text" placeholder="Name" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                    <input id="sosPhone" type="tel" placeholder="Phone (+91 XXXXX XXXXX)" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                    <button class="gradient-bg text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90">Add Contact</button>
+                </form>
+                <div id="sosContactsList" class="space-y-2"></div>
+            </div>
+            
+            <!-- Seller Bookings -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mt-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Latest Bookings</h3>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Confirm or cancel bookings</span>
+                </div>
+                <div id="sellerBookingsList" class="space-y-4">
+                    <!-- Seller bookings will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Hosted Rides (Carpool) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mt-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">My Hosted Rides</h3>
+                    <a href="carpool.html" class="text-primary-600 dark:text-primary-400 hover:underline">Offer a Ride</a>
+                </div>
+                <div id="hostedTripsList" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Check if user is logged in
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const userRole = localStorage.getItem('userRole');
+        const userName = localStorage.getItem('userName');
+
+        if (!isLoggedIn) {
+            window.location.href = 'login.html';
+        }
+
+        // Update user name
+        if (userName) {
+            document.getElementById('userName').textContent = userName;
+        }
+
+        // Show appropriate dashboard based on role (support both UI and DB values)
+        if (userRole === 'renter' || userRole === 'rentee') {
+            document.getElementById('renterDashboard').classList.remove('hidden');
+            loadRenterDashboard();
+            const rl = document.getElementById('roleLabel'); if (rl) rl.textContent = '— Renter';
+        } else if (userRole === 'owner' || userRole === 'seller') {
+            document.getElementById('ownerDashboard').classList.remove('hidden');
+            loadOwnerDashboard();
+            const rl = document.getElementById('roleLabel'); if (rl) rl.textContent = '— Seller';
+        }
+
+        async function loadRenterDashboard() {
+            const bookingsList = document.getElementById('bookingsList');
+            const userId = localStorage.getItem('userId');
+            let userBookings = [];
+            try {
+                const resp = await fetch(`/api/bookings/rentee/${userId}`);
+                if (resp.ok) userBookings = await resp.json();
+            } catch (_) {}
+
+            if (userBookings.length === 0) {
+                bookingsList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i data-lucide="calendar-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-400">No bookings yet. <a href="index.html" class="text-primary-600 hover:underline">Book your first car!</a></p>
+                    </div>
+                `;
+            } else {
+                bookingsList.innerHTML = userBookings.map(booking => {
+                    const carModel = `${booking.make || ''} ${booking.model || ''}`.trim();
+                    const canCancel = booking.status === 'pending' || booking.status === 'confirmed';
+                    // Get car image from primary_photo or first photo in array
+                    const carImage = booking.primary_photo || 
+                                    (Array.isArray(booking.photos) && booking.photos.length > 0 ? booking.photos[0] : '') ||
+                                    'https://images.unsplash.com/photo-1549921296-3fd62cf4a6ea?w=200&h=200&fit=crop';
+                    return `
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <img src="${carImage}" alt="${carModel}" class="w-16 h-16 rounded-lg object-cover">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800 dark:text-white">${carModel}</h4>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">${formatDate(booking.start_date)} - ${formatDate(booking.end_date)}</p>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">${booking.pickupLocation || ''}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold text-primary-600">₹${Number(booking.total_price).toLocaleString('en-IN')}</p>
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(booking.status)}">
+                                        ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                    </span>
+                                    ${canCancel ? `<div class="mt-2">
+                                        <button onclick="cancelBooking(${booking.id})" class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">Cancel</button>
+                                    </div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            lucide.createIcons();
+
+            // Compute summary metrics (not hardcoded)
+            try {
+                const totalBookingsEl = document.getElementById('totalBookings');
+                const activeRentalsEl = document.getElementById('activeRentals');
+                const totalSpentEl = document.getElementById('totalSpent');
+                const savedAmountEl = document.getElementById('savedAmount');
+
+                const activeStatuses = new Set(['pending','confirmed']);
+                const activeCount = userBookings.filter(b => activeStatuses.has(b.status)).length;
+                const totalSpent = userBookings.reduce((sum, b) => sum + Number(b.total_price || 0), 0);
+
+                if (totalBookingsEl) totalBookingsEl.textContent = String(userBookings.length);
+                if (activeRentalsEl) activeRentalsEl.textContent = String(activeCount);
+                if (totalSpentEl) totalSpentEl.textContent = `₹${totalSpent.toLocaleString('en-IN')}`;
+                if (savedAmountEl) savedAmountEl.textContent = `₹0`;
+            } catch (_) {}
+
+            // Load carpool bookings from DB
+            const carpoolEl = document.getElementById('carpoolBookingsList');
+            try {
+                const resp = await fetch(`/api/carpool/bookings/user/${userId}`);
+                const rides = resp.ok ? await resp.json() : [];
+                if (rides.length === 0) {
+                    carpoolEl.innerHTML = `<div class="text-center py-6 text-gray-600 dark:text-gray-400">No carpool rides yet.</div>`;
+                } else {
+                    carpoolEl.innerHTML = rides.map(r => `
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="font-semibold text-gray-800 dark:text-white">${r.from_city} → ${r.to_city}</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">${formatDate(r.date)} • ${formatTime(r.time)}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-primary-600">₹${Number(r.price_total).toLocaleString('en-IN')}</div>
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(r.status)}">${r.status}</span>
+                                    ${r.status !== 'cancelled' ? `<div class=\"mt-2\"><button onclick=\"cancelCarpoolDb(${r.id})\" class=\"px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200\">Cancel</button></div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (_) {
+                carpoolEl.innerHTML = `<div class="text-center py-6 text-gray-600 dark:text-gray-400">Failed to load carpool bookings.</div>`;
+            }
+
+            // Load hosted rides for this renter (if they host)
+            await loadHostedTripsForRenter();
+        }
+
+        async function cancelCarpoolDb(id) {
+            try {
+                const resp = await fetch(`/api/carpool/bookings/${id}/cancel`, { method: 'PUT' });
+                if (!resp.ok) throw new Error('fail');
+                showToast('Carpool booking cancelled', 'success');
+                loadRenterDashboard();
+            } catch (_) {
+                showToast('Failed to cancel carpool booking', 'error');
+            }
+        }
+
+        async function loadHostedTripsForRenter() {
+            const container = document.getElementById('hostedTripsListRenter');
+            const userId = localStorage.getItem('userId');
+            if (!container) return;
+            try {
+                const resp = await fetch(`/api/carpool/trips/driver/${userId}`);
+                const trips = resp.ok ? await resp.json() : [];
+                if (trips.length === 0) {
+                    container.innerHTML = `<div class="text-center py-6 text-gray-600 dark:text-gray-400">You haven't hosted any rides yet.</div>`;
+                    return;
+                }
+                container.innerHTML = trips.map(t => `
+                    <div class="flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div>
+                            <div class="font-semibold text-gray-800 dark:text-white">${t.from_city} → ${t.to_city}</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">${formatDate(t.date)} • ${formatTime(t.time)} • ${t.car_desc || ''}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Sold: ${t.sold_seats}/${t.seats} • Left: ${t.available_seats}</div>
+                            <div class="text-lg font-bold text-primary-600">Revenue: ₹${Number(t.revenue).toLocaleString('en-IN')}</div>
+                            <div class="mt-2"><button onclick="toggleTripDetails(${t.id})" class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600">View Details</button></div>
+                        </div>
+                    </div>
+                    <div id="tripDetails-${t.id}" class="hidden border border-gray-200 dark:border-gray-700 rounded-lg p-3 mt-2">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Loading…</div>
+                    </div>
+                `).join('');
+            } catch (_) {
+                container.innerHTML = `<div class="text-center py-6 text-gray-600 dark:text-gray-400">Failed to load hosted rides.</div>`;
+            }
+        }
+
+        async function loadOwnerDashboard() {
+            const ownerCarsList = document.getElementById('ownerCarsList');
+            const userId = localStorage.getItem('userId');
+            let ownerCars = [];
+            try {
+                const resp = await fetch(`/api/cars/seller/${userId}`);
+                if (resp.ok) ownerCars = await resp.json();
+            } catch (_) {}
+            
+            if (ownerCars.length === 0) {
+                ownerCarsList.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i data-lucide="car" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-400">No cars listed yet. <a href="car-listing.html" class="text-primary-600 hover:underline">List your first car!</a></p>
+                    </div>
+                `;
+            } else {
+                ownerCarsList.innerHTML = ownerCars.map(car => {
+                    const carImage = car.primary_photo || 
+                                    (Array.isArray(car.photos) && car.photos.length > 0 ? car.photos[0] : '') ||
+                                    'https://images.unsplash.com/photo-1549921296-3fd62cf4a6ea?w=800&h=600&fit=crop';
+                    return `
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden card-hover">
+                        <img src="${carImage}" alt="${(car.make || '') + ' ' + (car.model || '')}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 dark:text-white mb-1">${(car.make || '') + ' ' + (car.model || '')}</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-2">${(car.city && car.state) ? `${car.city}, ${car.state}` : ''}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-lg font-bold text-primary-600">₹${Number(car.price_per_day || 0).toLocaleString('en-IN')}/day</span>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Available</span>
+                            </div>
+                            <div class="mt-3"></div>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            }
+            
+            lucide.createIcons();
+            // Also load seller bookings list
+            await loadSellerBookings();
+
+            // Update quick stats: Total Bookings, Active Rentals, Total Spent
+            try {
+                const allResp = await fetch(`/api/bookings/seller/${userId}`);
+                const all = allResp.ok ? await allResp.json() : [];
+                const totalBookingsCount = all.length;
+                const activeRentalsCount = all.filter(b => b.status === 'confirmed').length;
+                const totalSpentByOwner = all.filter(b => ['confirmed','completed'].includes(b.status)).reduce((s, b) => s + Number(b.total_price || 0), 0);
+                document.getElementById('totalBookings').textContent = totalBookingsCount;
+                document.getElementById('activeRentals').textContent = activeRentalsCount;
+                document.getElementById('totalSpent').textContent = `₹${Number(totalSpentByOwner).toLocaleString('en-IN')}`;
+            } catch (_) {}
+
+            // Hosted rides
+            await loadHostedTrips();
+            // Seller earnings compute
+            try {
+                const now = new Date();
+                const y = now.getFullYear();
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const from = `${y}-${m}-01`;
+                const to = `${y}-${m}-31`;
+                const revResp = await fetch(`/api/sellers/${userId}/revenue?from=${from}&to=${to}`);
+                const monthData = revResp.ok ? await revResp.json() : { total_revenue: 0 };
+                const totalResp = await fetch(`/api/bookings/seller/${userId}`);
+                const all = totalResp.ok ? await totalResp.json() : [];
+                const totalRevenue = all.filter(b => ['confirmed','completed'].includes(b.status)).reduce((s, b) => s + Number(b.total_price || 0), 0);
+                const totalRequests = all.length;
+                const rate = totalRequests === 0 ? 0 : Math.round((all.filter(b => ['confirmed','completed'].includes(b.status)).length / totalRequests) * 100);
+                document.getElementById('ownerMonth').textContent = `₹${Number(monthData.total_revenue || 0).toLocaleString('en-IN')}`;
+                document.getElementById('ownerTotal').textContent = `₹${Number(totalRevenue).toLocaleString('en-IN')}`;
+                document.getElementById('ownerRate').textContent = `${rate}%`;
+            } catch (_) {}
+        }
+
+        async function loadHostedTrips() {
+            const container = document.getElementById('hostedTripsList');
+            const userId = localStorage.getItem('userId');
+            try {
+                const resp = await fetch(`/api/carpool/trips/driver/${userId}`);
+                const trips = resp.ok ? await resp.json() : [];
+                if (trips.length === 0) {
+                    container.innerHTML = `<div class="text-center py-6 text-gray-600 dark:text-gray-400">No hosted rides yet. <a href="carpool.html" class="text-primary-600 hover:underline">Offer your first ride</a>.</div>`;
+                    return;
+                }
+                container.innerHTML = trips.map(t => `
+                    <div class="flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div>
+                            <div class="font-semibold text-gray-800 dark:text-white">${t.from_city} → ${t.to_city}</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">${formatDate(t.date)} • ${formatTime(t.time)} • ${t.car_desc || ''}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Sold: ${t.sold_seats}/${t.seats} • Left: ${t.available_seats}</div>
+                            <div class="text-lg font-bold text-primary-600">Revenue: ₹${Number(t.revenue).toLocaleString('en-IN')}</div>
+                            <div class="mt-2">
+                                <button onclick="toggleTripDetails(${t.id})" class="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tripDetails-${t.id}" class="hidden border border-gray-200 dark:border-gray-700 rounded-lg p-3 mt-2">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Loading…</div>
+                    </div>
+                `).join('');
+            } catch (_) {
+                container.innerHTML = `<div class="text-center py-6 text-gray-600 dark:text-gray-400">Failed to load hosted rides.</div>`;
+            }
+        }
+
+        async function toggleTripDetails(tripId) {
+            const box = document.getElementById(`tripDetails-${tripId}`);
+            if (!box) return;
+            const isHidden = box.classList.contains('hidden');
+            if (isHidden) {
+                // fetch and show
+                try {
+                    box.innerHTML = `<div class="text-sm text-gray-600 dark:text-gray-400">Loading…</div>`;
+                    const resp = await fetch(`/api/carpool/trips/${tripId}/bookings`);
+                    const rows = resp.ok ? await resp.json() : [];
+                    if (rows.length === 0) {
+                        box.innerHTML = `<div class="text-sm text-gray-600 dark:text-gray-400">No bookings yet.</div>`;
+                    } else {
+                        box.innerHTML = rows.map(r => `
+                            <div class=\"flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0\">
+                                <div class=\"text-sm\">
+                                    <div class=\"font-medium text-gray-800 dark:text-white\">${r.renter_name || 'Passenger'}</div>
+                                    <div class=\"text-gray-600 dark:text-gray-400\">Seats: ${r.seats} • ₹${Number(r.price_total).toLocaleString('en-IN')}</div>
+                                </div>
+                                <span class=\"px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(r.status)}\">${r.status}</span>
+                            </div>
+                        `).join('');
+                    }
+                } catch (_) {
+                    box.innerHTML = `<div class="text-sm text-red-600">Failed to load details.</div>`;
+                }
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
+        }
+
+        async function loadSellerBookings() {
+            const listEl = document.getElementById('sellerBookingsList');
+            const userId = localStorage.getItem('userId');
+            let bookings = [];
+            try {
+                const resp = await fetch(`/api/bookings/seller/${userId}`);
+                if (resp.ok) bookings = await resp.json();
+            } catch (_) {}
+            if (bookings.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-6 text-gray-600 dark:text-gray-400">No bookings yet.</div>
+                `;
+                return;
+            }
+            listEl.innerHTML = bookings.slice(0, 10).map(b => {
+                const canConfirm = b.status === 'pending';
+                const canCancel = b.status === 'pending' || b.status === 'confirmed';
+                const carImage = b.primary_photo || 
+                                (Array.isArray(b.photos) && b.photos.length > 0 ? b.photos[0] : '') ||
+                                'https://images.unsplash.com/photo-1549921296-3fd62cf4a6ea?w=200&h=200&fit=crop';
+                return `
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="${carImage}" alt="${b.make} ${b.model}" class="w-16 h-16 rounded-lg object-cover">
+                                <div>
+                                    <div class="font-semibold text-gray-800 dark:text-white">#${b.id} • ${b.make} ${b.model}</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">${formatDate(b.start_date)} - ${formatDate(b.end_date)}</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Renter: ${b.rentee_name || 'N/A'}</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-primary-600">₹${Number(b.total_price).toLocaleString('en-IN')}</div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(b.status)}">${b.status}</span>
+                                <div class="mt-2 space-x-2">
+                                    ${canConfirm ? `<button onclick="confirmBooking(${b.id})" class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200">Confirm</button>` : ''}
+                                    ${canCancel ? `<button onclick="cancelBooking(${b.id})" class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">Cancel</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function confirmBooking(id) {
+            try {
+                const resp = await fetch(`/api/bookings/${id}/status`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'confirmed' }) });
+                if (!resp.ok) throw new Error('fail');
+                showToast(`Booking #${id} confirmed`, 'success');
+                loadSellerBookings();
+            } catch (_) { showToast('Failed to confirm booking', 'error'); }
+        }
+
+        async function cancelBooking(id) {
+            try {
+                const resp = await fetch(`/api/bookings/${id}/cancel`, { method: 'PUT' });
+                if (!resp.ok) throw new Error('fail');
+                showToast(`Booking #${id} cancelled`, 'success');
+                if (document.getElementById('sellerBookingsList')) loadSellerBookings();
+                if (document.getElementById('bookingsList')) loadRenterDashboard();
+            } catch (_) { showToast('Failed to cancel booking', 'error'); }
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'confirmed':
+                    return 'bg-blue-100 text-blue-800';
+                case 'completed':
+                    return 'bg-green-100 text-green-800';
+                case 'cancelled':
+                    return 'bg-red-100 text-red-800';
+                default:
+                    return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function triggerSOS() {
+            const contacts = loadSosContacts();
+            if (contacts.length > 0) {
+                const msg = encodeURIComponent('SOS: I need immediate assistance. Contact me back.');
+                // Open SMS compose to first contact (browser will prompt)
+                window.location.href = `sms:${contacts[0].phone}?body=${msg}`;
+                showToast(`SOS: contacting ${contacts[0].name}`, 'warning');
+            } else {
+                showToast('No SOS contacts saved. Add one below.', 'warning');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            showToast('Logged out', 'info', 900);
+            setTimeout(() => { window.location.href = 'login.html'; }, 900);
+        }
+
+        // ---- SOS Contacts (stored in localStorage) ----
+        const SOS_KEY = 'sosContacts';
+        function loadSosContacts() {
+            try { return JSON.parse(localStorage.getItem(SOS_KEY)) || []; } catch(_) { return []; }
+        }
+        function saveSosContacts(list) { localStorage.setItem(SOS_KEY, JSON.stringify(list)); }
+        function renderSosContacts() {
+            const listEl = document.querySelectorAll('#sosContactsList');
+            const contacts = loadSosContacts();
+            const html = contacts.length === 0 ? '<div class="text-sm text-gray-500">No contacts added.</div>' : contacts.map((c, i) => `
+                <div class="flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+                    <div>
+                        <div class="font-medium text-gray-800 dark:text-white">${c.name}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">${c.phone}</div>
+                    </div>
+                    <div class="space-x-2">
+                        <a href="tel:${c.phone}" class="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">Call</a>
+                        <a href="sms:${c.phone}?body=${encodeURIComponent('Hi, I added you as my CarBnB emergency contact.') }" class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200">SMS</a>
+                        <button onclick="removeSosContact(${i})" class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+            listEl.forEach(el => el.innerHTML = html);
+        }
+        function addSosContact(e) {
+            e.preventDefault();
+            const name = (document.getElementById('sosName')?.value || '').trim();
+            const phone = (document.getElementById('sosPhone')?.value || '').trim();
+            if (!name || !phone) { showToast('Enter name and phone', 'error'); return; }
+            const indianPhoneRegex = /^(\+91\s?|0)?[6-9]\d{9}$/;
+            if (!indianPhoneRegex.test(phone.replace(/\s+/g, ''))) { showToast('Invalid Indian phone number', 'error'); return; }
+            const list = loadSosContacts();
+            if (list.length >= 5) { showToast('Maximum 5 contacts allowed', 'warning'); return; }
+            list.push({ name, phone: phone.replace(/\s+/g, '') });
+            saveSosContacts(list);
+            renderSosContacts();
+            (document.getElementById('sosName') || {}).value = '';
+            (document.getElementById('sosPhone') || {}).value = '';
+            showToast('Contact added', 'success');
+        }
+        function removeSosContact(idx) {
+            const list = loadSosContacts();
+            list.splice(idx, 1);
+            saveSosContacts(list);
+            renderSosContacts();
+            showToast('Contact removed', 'info');
+        }
+        
+        // Edit/Stats features removed per user request
+        
+        document.addEventListener('DOMContentLoaded', renderSosContacts);
+    </script>
+</body>
+</html>
+
+

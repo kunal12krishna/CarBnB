@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Car - CarBnB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/booking.css">
+    <link rel="icon" href="data:,">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                        <i data-lucide="car" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">CarBnB</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        <i data-lucide="arrow-left" class="w-5 h-5 inline mr-1"></i>
+                        Back to Cars
+                    </a>
+                    <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <i data-lucide="sun" class="w-5 h-5 text-gray-600 dark:text-gray-300 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-gray-600 dark:text-gray-300 hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Car Details -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+                    <img id="carImage" src="" alt="Car" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h1 id="carModel" class="text-2xl font-bold text-gray-800 dark:text-white"></h1>
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                                <span id="carRating" class="text-gray-600 dark:text-gray-400"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-gray-400"></i>
+                                <span id="carLocation" class="text-gray-600 dark:text-gray-400"></span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="calendar" class="w-5 h-5 text-gray-400"></i>
+                                <span id="carYear" class="text-gray-600 dark:text-gray-400"></span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="fuel" class="w-5 h-5 text-gray-400"></i>
+                                <span id="carFuel" class="text-gray-600 dark:text-gray-400"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">Features</h3>
+                            <div id="carFeatures" class="flex flex-wrap gap-2">
+                                <!-- Features will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <div class="flex items-center space-x-4">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Owner" class="w-12 h-12 rounded-full">
+                                <div>
+                                    <p class="font-medium text-gray-800 dark:text-white">Hosted by <span id="carOwner"></span></p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Superhost • Joined 2022</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between">
+                            <span class="text-3xl font-bold text-gray-800 dark:text-white">
+                                ₹<span id="pricePerDay"></span><span class="text-lg text-gray-600 dark:text-gray-400 font-normal">/day</span>
+                            </span>
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">Available</span>
+                        </div>
+                    </div>
+
+                    <form onsubmit="handleBooking(event)" class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pick-up Date</label>
+                                <input type="date" id="startDate" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" onchange="calculateTotal()">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Return Date</label>
+                                <input type="date" id="endDate" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" onchange="calculateTotal()">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pick-up Location</label>
+                            <select required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="">Select pickup location</option>
+                                <option value="airport">Airport</option>
+                                <option value="downtown">Downtown</option>
+                                <option value="hotel">Hotel Delivery</option>
+                                <option value="home">Home Address</option>
+                            </select>
+                        </div>
+
+                        <!-- Pricing Breakdown -->
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-3">Pricing Details</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Base price (<span id="totalDays">0</span> days)</span>
+                                    <span class="text-gray-800 dark:text-white">₹<span id="basePrice">0</span></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Service fee</span>
+                                    <span class="text-gray-800 dark:text-white">₹<span id="serviceFee">299</span></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Insurance</span>
+                                    <span class="text-gray-800 dark:text-white">₹<span id="insurance">399</span></span>
+                                </div>
+                                <div class="border-t border-gray-300 dark:border-gray-600 pt-2 mt-2">
+                                    <div class="flex justify-between font-semibold">
+                                        <span class="text-gray-800 dark:text-white">Total</span>
+                                        <span class="text-primary-600">₹<span id="totalPrice">0</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                                                <button type="submit" class="w-full gradient-bg text-white py-4 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                                                        <i data-lucide="credit-card" class="w-5 h-5 inline mr-2"></i>
+                                                        Confirm Booking
+                                                </button>
+
+                                                <!-- Payment Modal -->
+                                                <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+                                                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-sm text-center relative">
+                                                        <button onclick="closePaymentModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                                                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Scan to Pay</h3>
+                                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay" alt="QR Code" class="mx-auto mb-4 rounded-lg border border-gray-200">
+                                                        <p class="mb-4 text-gray-600 dark:text-gray-300">Or just click continue to simulate payment.</p>
+                                                        <button id="continuePaymentBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition">Continue</button>
+                                                        <div id="paymentStatus" class="mt-4 text-sm font-semibold"></div>
+                                                    </div>
+                                                </div>
+
+                        <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+                            <i data-lucide="shield-check" class="w-4 h-4 inline mr-1"></i>
+                            Your payment is protected by CarBnB Guarantee
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Load selected car details
+        const selectedCar = JSON.parse(localStorage.getItem('selectedCar'));
+        
+        if (!selectedCar) {
+            window.location.href = 'index.html';
+        }
+
+        // Populate car details
+        document.getElementById('carImage').src = selectedCar.image;
+        document.getElementById('carModel').textContent = selectedCar.model;
+        document.getElementById('carRating').textContent = selectedCar.rating;
+        document.getElementById('carLocation').textContent = selectedCar.location;
+        document.getElementById('carYear').textContent = selectedCar.year + ' • ' + selectedCar.brand;
+        document.getElementById('carFuel').textContent = selectedCar.fuel;
+        document.getElementById('carOwner').textContent = selectedCar.owner;
+        document.getElementById('pricePerDay').textContent = selectedCar.price;
+
+        // Populate features
+        const featuresContainer = document.getElementById('carFeatures');
+        featuresContainer.innerHTML = selectedCar.features.map(feature => 
+            `<span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full">${feature}</span>`
+        ).join('');
+
+        // Set minimum dates
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').min = today;
+        document.getElementById('endDate').min = today;
+
+        // Update end date minimum when start date changes
+        document.getElementById('startDate').addEventListener('change', function() {
+            const startDate = this.value;
+            document.getElementById('endDate').min = startDate;
+            calculateTotal();
+        });
+
+        function calculateTotal() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            
+            if (startDate && endDate && endDate > startDate) {
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                
+                const basePrice = selectedCar.price * dayDiff;
+                const serviceFee = 25;
+                const insurance = 35;
+                const total = basePrice + serviceFee + insurance;
+                
+                document.getElementById('totalDays').textContent = dayDiff;
+                document.getElementById('basePrice').textContent = basePrice;
+                document.getElementById('totalPrice').textContent = total;
+            }
+        }
+
+        // Remove inline handleBooking. All booking logic is now in app.js and always shows payment modal first.
+    </script>
+</body>
+</html>
+
+

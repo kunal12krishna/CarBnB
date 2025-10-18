@@ -1,0 +1,64 @@
+{
+  "photos": [
+    {
+      "car_id": 1,
+      "make": "Hyundai",
+      "model": "Creta",
+      "photos": []
+    },
+    {
+      "car_id": 2,
+      "make": "Maruti Suzuki",
+      "model": "Swift",
+      "photos": []
+    },
+    {
+      "car_id": 3,
+      "make": "Tata",
+      "model": "Nexon EV",
+      "photos": []
+    },
+    {
+      "car_id": 4,
+      "make": "Toyota",
+      "model": "Innova Crysta",
+      "photos": []
+    },
+    {
+      "car_id": 5,
+      "make": "Honda",
+      "model": "City",
+      "photos": []
+    },
+    {
+      "car_id": 6,
+      "make": "Mahindra",
+      "model": "Thar",
+      "photos": []
+    },
+    {
+      "car_id": 7,
+      "make": "Kia",
+      "model": "Seltos",
+      "photos": []
+    },
+    {
+      "car_id": 8,
+      "make": "Skoda",
+      "model": "Kushaq",
+      "photos": []
+    },
+    {
+      "car_id": 9,
+      "make": "Hyundai",
+      "model": "i20",
+      "photos": []
+    },
+    {
+      "car_id": 10,
+      "make": "Maruti Suzuki",
+      "model": "Baleno",
+      "photos": []
+    }
+  ]
+}

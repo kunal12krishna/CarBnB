@@ -1,0 +1,40 @@
+.gradient-bg {
+    background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+}
+.file-upload {
+    border: 2px dashed #cbd5e1;
+    transition: all 0.3s ease;
+}
+.file-upload:hover {
+    border-color: #0ea5e9;
+    background-color: #f0f9ff;
+}
+.dark .file-upload {
+    border-color: #475569;
+}
+.dark .file-upload:hover {
+    border-color: #38bdf8;
+    background-color: #0c4a6e;
+}
+
+/* Custom input animations */
+#customBrand {
+    transition: all 0.3s ease;
+    animation: slideDown 0.3s ease;
+}
+
+#customBrand.hidden {
+    display: none !important;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

@@ -1,0 +1,30 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "NODE_ENV=development node backend/server.js",
+    "seed:cars": "node backend/seed/supabase-seed.js",
+    "update:photos": "node backend/seed/update-photos.js",
+    "photos:unsplash": "node backend/seed/unsplash-photos.js",
+    "photos:unsplash-api": "node backend/seed/unsplash-photos.js --api",
+    "fix:sequence": "node backend/seed/fix-sequence-simple.js",
+    "db:schema": "node backend/seed/seed-from-sql.js && echo 'Open backend/seed/schema.sql in Supabase SQL Editor and run it.'",
+    "db:seed": "node backend/seed/seed-from-sql.js && echo 'Open backend/seed/seed.sql in Supabase SQL Editor and run it.'",
+    "db:reset": "node backend/seed/seed-from-sql.js && echo 'Run schema.sql then seed.sql in Supabase SQL Editor.'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0"
+  }
+}

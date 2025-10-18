@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Your Car - CarBnB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/car-listing.css">
+    <link rel="icon" href="data:,">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                        <i data-lucide="car" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">CarBnB</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        <i data-lucide="arrow-left" class="w-5 h-5 inline mr-1"></i>
+                        Back to Dashboard
+                    </a>
+                    <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <i data-lucide="sun" class="w-5 h-5 text-gray-600 dark:text-gray-300 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-gray-600 dark:text-gray-300 hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">List Your Car</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    Share your car with others and earn money while it's not in use. 
+                    Our platform makes it easy and secure to rent out your vehicle.
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form onsubmit="handleCarListing(event)" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8">
+                <!-- Car Basic Information -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Car Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Make/Brand</label>
+                            <select required name="brand" id="brandSelect" onchange="handleBrandChange()" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="">Select brand</option>
+                                <option value="Maruti Suzuki">Maruti Suzuki</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Tata">Tata</option>
+                                <option value="Mahindra">Mahindra</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Kia">Kia</option>
+                                <option value="Skoda">Skoda</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="MG">MG</option>
+                                <option value="Renault">Renault</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <!-- Custom brand input (hidden by default) -->
+                            <input type="text" id="customBrand" name="custom_brand" placeholder="Enter brand name" class="hidden w-full px-4 py-3 mt-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model</label>
+                            <input name="model" id="modelInput" type="text" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="e.g., Creta, Swift, Nexon">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+                            <select name="year" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="">Select year</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fuel Type</label>
+                            <select name="fuel_type" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="">Select fuel type</option>
+                                <option value="petrol">Petrol</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electric">Electric</option>
+                                <option value="hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Transmission</label>
+                            <select name="transmission" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="">Select transmission</option>
+                                <option value="automatic">Automatic</option>
+                                <option value="manual">Manual</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Seats</label>
+                            <select name="seating_capacity" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="">Number of seats</option>
+                                <option value="2">2 seats</option>
+                                <option value="4">4 seats</option>
+                                <option value="5">5 seats</option>
+                                <option value="7">7 seats</option>
+                                <option value="8">8+ seats</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Location</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Street Address</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="Enter pickup address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">City</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="City">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">State</label>
+                            <input type="text" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="State">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photos -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Photos</h3>
+                    <div class="file-upload rounded-lg p-8 text-center">
+                        <i data-lucide="upload" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-400 mb-2">Drag and drop photos here, or click to browse</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-500">Upload up to 10 photos. JPG, PNG, or GIF format.</p>
+                        <input type="file" multiple accept="image/*" class="hidden" id="photoUpload">
+                        <button type="button" onclick="document.getElementById('photoUpload').click()" class="mt-4 px-6 py-2 gradient-bg text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
+                            Choose Photos
+                        </button>
+                    </div>
+                    <div id="photoPreview" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 hidden"></div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Pricing</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Daily Rate</label>
+                            <div class="relative">
+                                <div class="absolute left-3 top-3 text-gray-600 dark:text-gray-400">₹</div>
+                                <input name="price_per_day" type="number" required min="200" max="20000" class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="2500">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Recommended: ₹1800–₹3500</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Weekly Rate</label>
+                            <div class="relative">
+                                <div class="absolute left-3 top-3 text-gray-600 dark:text-gray-400">₹</div>
+                                <input type="number" min="50" max="5000" class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="300">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Save 15% for weekly rentals</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Monthly Rate</label>
+                            <div class="relative">
+                                <div class="absolute left-3 top-3 text-gray-600 dark:text-gray-400">₹</div>
+                                <input type="number" min="200" max="15000" class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="1200">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Save 20% for monthly rentals</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Additional Information</h3>
+                    <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white" placeholder="Add any special instructions, house rules, or additional information about your car..."></textarea>
+                </div>
+
+                <!-- Terms -->
+                <div class="mb-8">
+                    <label class="flex items-start space-x-3">
+                        <input type="checkbox" required class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-1">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">
+                            I agree to CarBnB's <a href="#" class="text-primary-600 dark:text-primary-400 hover:underline">Terms of Service</a> and 
+                            <a href="#" class="text-primary-600 dark:text-primary-400 hover:underline">Host Protection Policy</a>. 
+                            I confirm that I have proper insurance and authorization to rent this vehicle.
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex space-x-4">
+                    <button type="submit" class="flex-1 gradient-bg text-white py-4 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                        <i data-lucide="check" class="w-5 h-5 inline mr-2"></i>
+                        List My Car
+                    </button>
+                    <button type="button" onclick="saveDraft()" class="px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Save Draft
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Photo upload handling
+        // Maintain a global array of selected files for upload
+        let selectedPhotoFiles = [];
+        document.getElementById('photoUpload').addEventListener('change', function(e) {
+            selectedPhotoFiles = Array.from(e.target.files);
+            renderPhotoPreview();
+        });
+
+        function renderPhotoPreview() {
+            const preview = document.getElementById('photoPreview');
+            if (selectedPhotoFiles.length > 0) {
+                preview.classList.remove('hidden');
+                preview.innerHTML = selectedPhotoFiles.map((file, index) => {
+                    const url = URL.createObjectURL(file);
+                    return `
+                        <div class="relative">
+                            <img src="${url}" alt="Car photo ${index + 1}" class="w-full h-24 object-cover rounded-lg">
+                            <button type="button" onclick="removePhoto(${index})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600">×</button>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                preview.classList.add('hidden');
+                preview.innerHTML = '';
+            }
+        }
+
+        function removePhoto(index) {
+            selectedPhotoFiles.splice(index, 1);
+            // Update the file input (clear and re-add remaining files)
+            const input = document.getElementById('photoUpload');
+            const dt = new DataTransfer();
+            selectedPhotoFiles.forEach(f => dt.items.add(f));
+            input.files = dt.files;
+            renderPhotoPreview();
+        }
+
+        // Handle brand selection change
+        function handleBrandChange() {
+            const brandSelect = document.getElementById('brandSelect');
+            const customBrandInput = document.getElementById('customBrand');
+            
+            if (brandSelect.value === 'Other') {
+                customBrandInput.classList.remove('hidden');
+                customBrandInput.required = true;
+                customBrandInput.focus();
+            } else {
+                customBrandInput.classList.add('hidden');
+                customBrandInput.required = false;
+                customBrandInput.value = '';
+            }
+        }
+
+        async function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleCarListing(event) {
+            event.preventDefault();
+            const userId = localStorage.getItem('userId');
+            const userRole = localStorage.getItem('userRole');
+            if (!userId || (userRole !== 'owner' && userRole !== 'seller')) {
+                showToast('Please login as a car owner to list a car.', 'error');
+                return;
+            }
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Handle custom brand if "Other" is selected
+            let brandValue = formData.get('brand');
+            if (brandValue === 'Other') {
+                const customBrand = formData.get('custom_brand');
+                if (!customBrand || customBrand.trim() === '') {
+                    showToast('Please enter a custom brand name', 'error');
+                    return;
+                }
+                brandValue = customBrand.trim();
+            }
+
+            const payload = {
+                seller_id: Number(userId),
+                make: brandValue,
+                model: formData.get('model'),
+                variant: '',
+                year: Number(formData.get('year')),
+                seats: Number(formData.get('seating_capacity')),
+                price_per_day: Number(formData.get('price_per_day')),
+                fuel_type: formData.get('fuel_type'),
+                transmission: formData.get('transmission')
+            };
+
+            // If user selected photos, upload them first
+            const input = document.getElementById('photoUpload');
+            const files = selectedPhotoFiles;
+
+            try {
+                if (files.length > 0) {
+                    showToast('Uploading photos... Please wait.', 'info');
+                    // Convert files to data URLs
+                    const filesForUpload = await Promise.all(files.map(async (f) => ({
+                        file: await readFileAsDataURL(f),
+                        fileName: f.name
+                    })));
+
+                    // Send to backend upload endpoint
+                    const upResp = await fetch('/api/upload/photos', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ files: filesForUpload })
+                    });
+
+                    if (!upResp.ok) {
+                        const err = await upResp.json().catch(() => null);
+                        throw new Error((err && err.error && err.error.message) || 'Photo upload failed');
+                    }
+
+                    const upData = await upResp.json();
+                    if (upData.urls && upData.urls.length > 0) {
+                        payload.photos = upData.urls;
+                        payload.primary_photo = upData.urls[0];
+                    }
+                }
+
+                // Now create the car with photos (if any)
+                const resp = await fetch('/api/cars', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => null);
+                    throw new Error((err && err.error && err.error.message) || 'Failed to list car');
+                }
+
+                showToast('Car listed successfully!', 'success');
+                // Clear file input and preview
+                selectedPhotoFiles = [];
+                renderPhotoPreview();
+                if (input) { input.value = ''; }
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+            } catch (e) {
+                showToast(e.message || 'Listing failed', 'error');
+            }
+        }
+
+        function saveDraft() {
+            console.log('Draft saved');
+            showToast('Draft saved successfully! You can continue editing later.', 'info');
+        }
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.min = today;
+        });
+    </script>
+</body>
+</html>
+
+
